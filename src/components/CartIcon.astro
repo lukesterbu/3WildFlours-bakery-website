@@ -1,0 +1,37 @@
+---
+/**
+ * Cart trigger button. Place inside the header.
+ * The drawer panel itself lives in BaseLayout to escape the header's
+ * backdrop-blur containing block.
+ */
+---
+
+<button
+  id="cart-icon-trigger"
+  type="button"
+  class="relative p-2 text-earth-800 hover:text-sage-700 transition-colors"
+  aria-label="Open cart"
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="22"
+    height="22"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.8"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M3 6h2l2.4 12.2a2 2 0 0 0 2 1.8h8.2a2 2 0 0 0 2-1.6L21 9H6"></path>
+    <circle cx="9" cy="21" r="1"></circle>
+    <circle cx="17" cy="21" r="1"></circle>
+  </svg>
+  <span
+    id="cart-count-badge"
+    class="absolute -top-1 -right-1 bg-sage-700 text-cream-50 text-[10px] font-medium rounded-full w-5 h-5 flex items-center justify-center hidden"
+  >
+    0
+  </span>
+</button>

@@ -1,0 +1,119 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Wildflower from "../components/Wildflower.astro";
+---
+
+<BaseLayout title="About">
+  <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="text-center mb-12">
+      <p class="font-script text-2xl text-sage-700 mb-1">our roots</p>
+      <h1 class="text-5xl md:text-6xl mb-4">Three flours. Three kids. One kitchen.</h1>
+      <p class="text-earth-800/80 text-lg">
+        The story behind the name — and the bread.
+      </p>
+    </div>
+
+    <div class="aspect-[16/9] rounded-lg overflow-hidden mb-12 bg-cream-100 relative">
+      <img
+        src="https://images.unsplash.com/photo-1549931319-a545dcf3bc73?w=1600&auto=format&fit=crop&q=80"
+        alt="Fresh sourdough"
+        class="w-full h-full object-cover"
+      />
+      <div class="absolute bottom-3 right-3 text-xs text-cream-50/80 bg-earth-900/40 backdrop-blur-sm px-2 py-1 rounded">
+        placeholder — swap with a photo of Kate's bakes
+      </div>
+    </div>
+
+    <div class="max-w-none space-y-6 text-earth-900 leading-relaxed text-lg">
+      <p class="text-2xl font-serif text-earth-900">
+        3WildFlour's started in Kate's kitchen, named for her three wild ones —
+        <span class="text-sage-700">Brooke, Caden, and Dylan</span>.
+      </p>
+
+      <p>
+        The pun is on purpose. Three flours. Three flowers. Three kids rooting
+        and growing in the same patch of sun. The name reminds us why we bake
+        in the first place — for the people at our own table, and for everyone
+        we get to feed beyond it.
+      </p>
+
+      <p>
+        [edit: a sentence or two about how the bakery started — was it sourdough
+        during lockdown, a hobby that got out of hand, neighbors asking for
+        more? This is where the personal "spark" goes.]
+      </p>
+
+      <p>
+        Today, the kitchen is a little bigger, but the rules haven't changed.
+        We mill heritage grains in small batches. We let the dough rest as long
+        as it needs. We bake what we'd want our own family to eat — because,
+        more often than not, they're the ones eating it.
+      </p>
+
+      <p>
+        What you get from us is what came out of the oven that morning. Sometimes
+        we sell out by ten. Sometimes there's an extra loaf nobody's claimed.
+        That's how it goes when one baker does it all by hand.
+      </p>
+
+      <p class="font-script text-3xl text-sage-700 pt-4">
+        Thank you for being part of the patch.
+      </p>
+
+      <p class="text-right font-serif text-xl text-earth-800 italic">
+        — Kate
+      </p>
+    </div>
+
+    <!-- Meet the bakers card -->
+    <div class="mt-16 bg-sage-100/40 rounded-lg p-8 md:p-10 relative overflow-hidden">
+      <div class="absolute top-3 right-3 opacity-30">
+        <Wildflower class="text-sage-700" size={56} />
+      </div>
+      <div class="grid md:grid-cols-[200px_1fr] gap-8 items-start relative">
+        <div class="aspect-square rounded-full bg-cream-100 border-2 border-cream-200 flex items-center justify-center text-center px-4">
+          <span class="text-xs text-earth-700/60">
+            [Photo of Kate &<br />the kids to come]
+          </span>
+        </div>
+        <div>
+          <p class="eyebrow mb-2">Meet the bakers</p>
+          <h2 class="text-3xl mb-4">Kate, Brooke, Caden & Dylan</h2>
+          <p class="text-earth-800 leading-relaxed">
+            [edit: a short paragraph about Kate — what she baked first, what
+            she loves about it, where she trained or how she taught herself,
+            and how the kids fit in (do they help? have favorites? get the
+            first warm slice?). Keep it warm and personal — this is the part
+            people come to the About page hoping to read.]
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Values cards -->
+    <div class="grid md:grid-cols-3 gap-6 mt-16">
+      <div class="bg-cream-100 p-6 rounded-lg">
+        <Wildflower class="text-sage-500 mb-3" size={32} />
+        <h3 class="font-serif text-xl mb-2">Three flours</h3>
+        <p class="text-sm text-earth-800/80">
+          Heritage wheat, rye, and spelt — each milled in small batches.
+          One for each of the kids, as the story goes.
+        </p>
+      </div>
+      <div class="bg-cream-100 p-6 rounded-lg">
+        <Wildflower class="text-sage-500 mb-3" size={32} />
+        <h3 class="font-serif text-xl mb-2">Patient fermentation</h3>
+        <p class="text-sm text-earth-800/80">
+          24 to 48 hours of cold proof. Time is the secret ingredient.
+        </p>
+      </div>
+      <div class="bg-cream-100 p-6 rounded-lg">
+        <Wildflower class="text-sage-500 mb-3" size={32} />
+        <h3 class="font-serif text-xl mb-2">Local & seasonal</h3>
+        <p class="text-sm text-earth-800/80">
+          Butter, eggs, and fruit from farms within a 50-mile radius.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

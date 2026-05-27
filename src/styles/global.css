@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-script: "Caveat", "Brush Script MT", cursive;
+
+  /* Cream / parchment base */
+  --color-cream-50: #fbf6ec;
+  --color-cream-100: #f3ead8;
+  --color-cream-200: #e8dcc1;
+
+  /* Sage green — primary accent (cards, buttons, eyebrow text) */
+  --color-sage-100: #d8dcc0;
+  --color-sage-300: #a3ad84;
+  --color-sage-500: #7a8560;
+  --color-sage-700: #5a6446;
+  --color-sage-900: #3a402e;
+
+  /* Earthy brown — text + footer */
+  --color-earth-700: #6b5a3d;
+  --color-earth-800: #4d4129;
+  --color-earth-900: #2f2818;
+
+  /* Dusty rose — gentle pop for wildflower moments */
+  --color-bloom-300: #d9a5a1;
+  --color-bloom-500: #b97a76;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-cream-50);
+  color: var(--color-earth-800);
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  letter-spacing: 0.005em;
+}
+
+.font-script {
+  font-family: var(--font-script);
+}
+
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-sage-700);
+}

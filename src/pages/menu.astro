@@ -1,0 +1,112 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getCollections } from "../lib/products";
+
+const SECTION_ORDER = ["Breads", "Pastries"];
+
+const allCollections = await getCollections();
+
+const sections = SECTION_ORDER.map((title) =>
+  allCollections.find((c) => c.title === title),
+).filter((c): c is NonNullable<typeof c> => Boolean(c));
+
+const hasProducts = sections.some((s) => s.products.length > 0);
+---
+
+<BaseLayout title="Menu">
+  <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="text-center mb-16">
+      <p class="font-script text-2xl text-sage-700 mb-1">fresh from the oven</p>
+      <h1 class="text-5xl md:text-6xl mb-4">The Menu</h1>
+      <p class="text-earth-800/80 max-w-2xl mx-auto text-lg">
+        Order pickup or delivery. Most items need 24-hour notice — please order
+        by 4pm the day before.
+      </p>
+    </div>
+
+    {!hasProducts && (
+      <div class="text-center bg-cream-100 rounded-lg p-8 max-w-xl mx-auto">
+        <p class="font-script text-2xl text-sage-700 mb-2">just out of the oven</p>
+        <p class="text-earth-800">
+          New menu coming soon. Check back tomorrow, or
+          <a href="/contact" class="text-sage-700 hover:underline">say hello</a>
+          for a custom order.
+        </p>
+      </div>
+    )}
+
+    {sections.map((section) => (
+      section.products.length > 0 && (
+        <div class="mb-20">
+          <h2 class="text-3xl md:text-4xl mb-8 pb-2 border-b border-cream-200">
+            {section.title}
+          </h2>
+          <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {section.products.map((product) => (
+              <article class="group">
+                <div class="aspect-square overflow-hidden rounded-lg mb-4 bg-cream-100">
+                  {product.image ? (
+                    <img
+                      src={product.image.url}
+                      alt={product.image.altText ?? product.title}
+                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  ) : (
+                    <div class="w-full h-full flex items-center justify-center text-earth-700/40 text-sm">
+                      no photo yet
+                    </div>
+                  )}
+                </div>
+                <div class="flex justify-between items-baseline mb-1">
+                  <h3 class="text-xl">{product.title}</h3>
+                  <span class="text-sage-700 font-medium">{product.price}</span>
+                </div>
+                <p class="text-earth-800/80 text-sm mb-3 line-clamp-2">
+                  {product.description}
+                </p>
+                <button
+                  data-add-to-cart
+                  data-variant-id={product.variantId}
+                  data-title={product.title}
+                  disabled={!product.available}
+                  class:list={[
+                    "w-full px-4 py-2 rounded-full text-sm font-medium transition-colors",
+                    product.available
+                      ? "bg-sage-700 hover:bg-sage-900 text-cream-50"
+                      : "bg-cream-200 text-earth-800/60 cursor-not-allowed",
+                  ]}
+                >
+                  {product.available ? "Add to cart" : "Sold out"}
+                </button>
+              </article>
+            ))}
+          </div>
+        </div>
+      )
+    ))}
+  </section>
+</BaseLayout>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>("[data-add-to-cart]").forEach((button) => {
+    button.addEventListener("click", async () => {
+      const variantId = button.dataset.variantId;
+      if (!variantId || button.disabled) return;
+      const originalText = button.textContent;
+      button.disabled = true;
+      button.textContent = "Adding…";
+      try {
+        await window.cartClient.add(variantId, 1);
+        button.textContent = "Added ✓";
+        setTimeout(() => {
+          button.textContent = originalText;
+          button.disabled = false;
+        }, 1200);
+      } catch (err) {
+        console.error(err);
+        button.textContent = originalText;
+        button.disabled = false;
+      }
+    });
+  });
+</script>

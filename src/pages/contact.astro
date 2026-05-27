@@ -1,0 +1,98 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Wildflower from "../components/Wildflower.astro";
+---
+
+<BaseLayout title="Contact Us">
+  <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="text-center mb-12">
+      <p class="font-script text-2xl text-sage-700 mb-1">say hello</p>
+      <h1 class="text-5xl md:text-6xl mb-4">Get in Touch</h1>
+      <p class="text-earth-800/80 text-lg max-w-2xl mx-auto">
+        Questions, special requests, or just want to say hi? Drop us a line.
+      </p>
+    </div>
+
+    <div class="aspect-[16/9] rounded-lg overflow-hidden mb-12 bg-cream-100 relative">
+      <img
+        src="https://images.unsplash.com/photo-1568471173242-461f0a730452?w=1600&auto=format&fit=crop&q=80"
+        alt="Fresh bakes cooling"
+        class="w-full h-full object-cover"
+      />
+      <div class="absolute bottom-3 right-3 text-xs text-cream-50/80 bg-earth-900/40 backdrop-blur-sm px-2 py-1 rounded">
+        placeholder photo
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-8 mb-16">
+      <div class="bg-cream-100 p-8 rounded-lg">
+        <p class="eyebrow mb-3">Email</p>
+        <a
+          href="mailto:hello@3wildflours.com"
+          class="font-serif text-2xl text-earth-900 hover:text-sage-700 transition-colors break-all"
+        >
+          hello@3wildflours.com
+        </a>
+        <p class="text-sm text-earth-700/80 mt-3">
+          The fastest way to reach us. We try to reply within a day.
+        </p>
+      </div>
+
+      <div class="bg-cream-100 p-8 rounded-lg">
+        <p class="eyebrow mb-3">Follow along</p>
+        <a
+          href="https://instagram.com/3wildflours"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="font-serif text-2xl text-earth-900 hover:text-sage-700 transition-colors"
+        >
+          @3wildflours
+        </a>
+        <p class="text-sm text-earth-700/80 mt-3">
+          For weekly menus, behind-the-scenes, and what's coming out of the
+          oven tomorrow.
+        </p>
+      </div>
+    </div>
+
+    <div class="bg-sage-100/40 rounded-lg p-8 md:p-12 relative overflow-hidden">
+      <div class="absolute top-4 right-4 opacity-30">
+        <Wildflower class="text-sage-700" size={56} />
+      </div>
+      <div class="relative">
+        <p class="font-script text-2xl text-sage-700 mb-2 text-center">
+          how it works
+        </p>
+        <h2 class="text-3xl text-center mb-8">Ordering & pickup</h2>
+
+        <div class="grid md:grid-cols-3 gap-6 text-center">
+          <div>
+            <div class="text-3xl mb-2">🍞</div>
+            <h3 class="font-serif text-xl mb-2">Place your order</h3>
+            <p class="text-sm text-earth-700/80 leading-relaxed">
+              Order from the <a href="/menu" class="text-sage-700 hover:underline">menu</a>,
+              or send a <a href="/custom-orders" class="text-sage-700 hover:underline">custom request</a>
+              for something special.
+            </p>
+          </div>
+          <div>
+            <div class="text-3xl mb-2">⏳</div>
+            <h3 class="font-serif text-xl mb-2">We bake to order</h3>
+            <p class="text-sm text-earth-700/80 leading-relaxed">
+              Most items need at least 24 hours' notice. Custom cakes need
+              more — we'll confirm timing when we reply.
+            </p>
+          </div>
+          <div>
+            <div class="text-3xl mb-2">🌾</div>
+            <h3 class="font-serif text-xl mb-2">Pickup or delivery</h3>
+            <p class="text-sm text-earth-700/80 leading-relaxed">
+              [edit: describe how customers receive their order — pickup
+              location, local delivery zone, farmers' market, etc.]
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

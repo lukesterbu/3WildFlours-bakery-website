@@ -1,0 +1,95 @@
+---
+import Wildflower from "./Wildflower.astro";
+import CartIcon from "./CartIcon.astro";
+
+const navLinks = [
+  { href: "/menu", label: "Menu" },
+  { href: "/about", label: "About" },
+  { href: "/custom-orders", label: "Custom Orders" },
+  { href: "/contact", label: "Contact" },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="sticky top-0 z-40 bg-cream-50/95 backdrop-blur border-b border-cream-200">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-20">
+      <a href="/" class="flex items-center gap-3 group">
+        <Wildflower class="text-sage-700 group-hover:text-sage-900 transition-colors" size={32} />
+        <span class="font-serif text-2xl text-earth-900 group-hover:text-sage-700 transition-colors">
+          3WildFlour's
+        </span>
+      </a>
+
+      <div class="flex items-center gap-2 md:gap-6">
+        <nav class="hidden md:flex items-center gap-8">
+          {navLinks.map((link) => (
+            <a
+              href={link.href}
+              class={`text-sm tracking-wide transition-colors ${
+                currentPath === link.href
+                  ? "text-sage-700 font-medium"
+                  : "text-earth-800 hover:text-sage-700"
+              }`}
+            >
+              {link.label}
+            </a>
+          ))}
+        </nav>
+
+        <CartIcon />
+
+        <button
+          id="mobile-menu-toggle"
+          class="md:hidden p-2 text-earth-800"
+          aria-label="Toggle menu"
+          aria-expanded="false"
+        >
+          <svg id="menu-icon-open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+          <svg id="menu-icon-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <nav id="mobile-menu" class="hidden md:hidden pb-4 space-y-2">
+      {navLinks.map((link) => (
+        <a
+          href={link.href}
+          class={`block px-4 py-2 rounded text-base ${
+            currentPath === link.href
+              ? "bg-cream-100 text-sage-700 font-medium"
+              : "text-earth-800 hover:bg-cream-100"
+          }`}
+        >
+          {link.label}
+        </a>
+      ))}
+      <a
+        href="/menu"
+        class="block text-center bg-sage-700 text-cream-50 px-5 py-3 rounded-full text-base font-medium mt-2"
+      >
+        Order Now
+      </a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const toggle = document.getElementById("mobile-menu-toggle");
+  const menu = document.getElementById("mobile-menu");
+  const iconOpen = document.getElementById("menu-icon-open");
+  const iconClose = document.getElementById("menu-icon-close");
+
+  toggle?.addEventListener("click", () => {
+    const isOpen = !menu?.classList.contains("hidden");
+    menu?.classList.toggle("hidden");
+    iconOpen?.classList.toggle("hidden");
+    iconClose?.classList.toggle("hidden");
+    toggle.setAttribute("aria-expanded", String(!isOpen));
+  });
+</script>

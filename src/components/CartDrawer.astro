@@ -1,0 +1,244 @@
+---
+/**
+ * Cart drawer panel + overlay + global cart script.
+ * Place once in BaseLayout (NOT inside the header — backdrop-blur in
+ * the header creates a containing block that breaks fixed positioning).
+ * The trigger button lives in CartIcon and is referenced by ID.
+ */
+---
+
+<!-- Drawer overlay -->
+<div
+  id="cart-drawer-overlay"
+  class="fixed inset-0 bg-earth-900/60 z-50 opacity-0 pointer-events-none transition-opacity duration-200"
+  aria-hidden="true"
+>
+</div>
+
+<!-- Drawer panel -->
+<aside
+  id="cart-drawer"
+  class="fixed top-0 right-0 h-full w-full max-w-md bg-cream-50 z-50 shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col"
+  aria-hidden="true"
+  aria-label="Shopping cart"
+>
+  <header class="flex items-center justify-between px-6 py-5 border-b border-cream-200">
+    <div>
+      <p class="font-script text-xl text-sage-700 leading-none">your basket</p>
+      <h2 class="font-serif text-2xl">Cart</h2>
+    </div>
+    <button
+      id="cart-close"
+      type="button"
+      class="p-2 text-earth-800 hover:text-sage-700 transition-colors"
+      aria-label="Close cart"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+  </header>
+
+  <div id="cart-body" class="flex-1 overflow-y-auto px-6 py-4">
+    <div id="cart-empty" class="text-center py-16">
+      <p class="font-script text-2xl text-sage-700 mb-2">nothing in the basket yet</p>
+      <p class="text-earth-700/80 text-sm mb-6">Browse the menu and add a loaf.</p>
+      <a
+        href="/menu"
+        class="inline-block bg-sage-700 hover:bg-sage-900 text-cream-50 px-6 py-2 rounded-full text-sm font-medium transition-colors"
+        data-close-on-click
+      >
+        See the menu
+      </a>
+    </div>
+    <ul id="cart-lines" class="space-y-4 hidden"></ul>
+  </div>
+
+  <footer
+    id="cart-footer"
+    class="border-t border-cream-200 px-6 py-5 hidden"
+  >
+    <div class="flex justify-between items-baseline mb-4">
+      <span class="eyebrow">Subtotal</span>
+      <span id="cart-subtotal" class="font-serif text-2xl text-earth-900">—</span>
+    </div>
+    <p class="text-xs text-earth-700/70 mb-4 text-center">
+      Taxes and pickup details calculated at checkout.
+    </p>
+    <a
+      id="cart-checkout"
+      href="#"
+      class="block w-full text-center bg-sage-700 hover:bg-sage-900 text-cream-50 px-6 py-3 rounded-full font-medium transition-colors"
+    >
+      Checkout on Shopify →
+    </a>
+  </footer>
+</aside>
+
+<script>
+  import {
+    addToCart,
+    getCart,
+    onCartUpdated,
+    removeFromCart,
+    updateLineQuantity,
+    formatLinePrice,
+    type Cart,
+    type CartLine,
+  } from "../lib/cart";
+
+  // Expose a tiny global API so other inline scripts (e.g. on the menu page)
+  // can call addToCart without re-importing the module client-side.
+  declare global {
+    interface Window {
+      cartClient: {
+        add: (variantId: string, quantity?: number) => Promise<void>;
+        open: () => void;
+        close: () => void;
+      };
+    }
+  }
+
+  const trigger = document.getElementById("cart-icon-trigger")!;
+  const overlay = document.getElementById("cart-drawer-overlay")!;
+  const drawer = document.getElementById("cart-drawer")!;
+  const closeBtn = document.getElementById("cart-close")!;
+  const badge = document.getElementById("cart-count-badge")!;
+  const emptyEl = document.getElementById("cart-empty")!;
+  const linesEl = document.getElementById("cart-lines")! as HTMLUListElement;
+  const footer = document.getElementById("cart-footer")!;
+  const subtotalEl = document.getElementById("cart-subtotal")!;
+  const checkoutEl = document.getElementById("cart-checkout")! as HTMLAnchorElement;
+
+  function escapeHtml(s: string): string {
+    return s
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function renderLine(line: CartLine): string {
+    const img = line.merchandise.product.featuredImage;
+    const title = escapeHtml(line.merchandise.product.title);
+    const price = formatLinePrice(line);
+    const imgHtml = img
+      ? `<img src="${img.url}" alt="${escapeHtml(img.altText ?? title)}" class="w-full h-full object-cover" />`
+      : `<div class="w-full h-full flex items-center justify-center text-earth-700/40 text-[10px] text-center px-1">no photo</div>`;
+    return `
+      <li class="flex gap-3" data-line-id="${line.id}">
+        <div class="w-20 h-20 flex-shrink-0 rounded bg-cream-100 overflow-hidden">${imgHtml}</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex justify-between gap-2">
+            <h3 class="font-serif text-base truncate">${title}</h3>
+            <span class="text-sage-700 text-sm font-medium whitespace-nowrap">${price}</span>
+          </div>
+          <div class="mt-2 flex items-center gap-2">
+            <button type="button" data-qty-decrease class="w-7 h-7 border border-cream-200 rounded hover:bg-cream-100 text-earth-800" aria-label="Decrease quantity">−</button>
+            <span data-qty class="text-sm w-6 text-center">${line.quantity}</span>
+            <button type="button" data-qty-increase class="w-7 h-7 border border-cream-200 rounded hover:bg-cream-100 text-earth-800" aria-label="Increase quantity">+</button>
+            <button type="button" data-remove class="ml-auto text-xs text-earth-700/60 hover:text-bloom-500 underline-offset-2 hover:underline">Remove</button>
+          </div>
+        </div>
+      </li>
+    `;
+  }
+
+  function render(cart: Cart | null): void {
+    const count = cart?.totalQuantity ?? 0;
+    if (count > 0) {
+      badge.textContent = String(count);
+      badge.classList.remove("hidden");
+    } else {
+      badge.classList.add("hidden");
+    }
+
+    if (!cart || cart.lines.length === 0) {
+      emptyEl.classList.remove("hidden");
+      linesEl.classList.add("hidden");
+      footer.classList.add("hidden");
+      linesEl.innerHTML = "";
+      return;
+    }
+
+    emptyEl.classList.add("hidden");
+    linesEl.classList.remove("hidden");
+    footer.classList.remove("hidden");
+    linesEl.innerHTML = cart.lines.map(renderLine).join("");
+    subtotalEl.textContent = cart.subtotal;
+    checkoutEl.href = cart.checkoutUrl;
+  }
+
+  function open(): void {
+    overlay.classList.remove("pointer-events-none");
+    overlay.classList.add("opacity-100");
+    drawer.classList.remove("translate-x-full");
+    drawer.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  }
+  function close(): void {
+    overlay.classList.add("pointer-events-none");
+    overlay.classList.remove("opacity-100");
+    drawer.classList.add("translate-x-full");
+    drawer.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+  }
+
+  trigger.addEventListener("click", open);
+  closeBtn.addEventListener("click", close);
+  overlay.addEventListener("click", close);
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") close();
+  });
+
+  // Close drawer for "View menu" link in empty state
+  drawer.addEventListener("click", (e) => {
+    const target = e.target as HTMLElement;
+    if (target.closest("[data-close-on-click]")) close();
+  });
+
+  // Line item interactions (delegated)
+  linesEl.addEventListener("click", async (e) => {
+    const target = e.target as HTMLElement;
+    const li = target.closest("[data-line-id]") as HTMLElement | null;
+    if (!li) return;
+    const lineId = li.dataset.lineId!;
+    const qtyEl = li.querySelector("[data-qty]") as HTMLElement;
+    const currentQty = parseInt(qtyEl.textContent ?? "1", 10);
+
+    try {
+      if (target.closest("[data-qty-increase]")) {
+        await updateLineQuantity(lineId, currentQty + 1);
+      } else if (target.closest("[data-qty-decrease]")) {
+        await updateLineQuantity(lineId, currentQty - 1);
+      } else if (target.closest("[data-remove]")) {
+        await removeFromCart(lineId);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Couldn't update cart. Please try again.");
+    }
+  });
+
+  // React to cart updates
+  onCartUpdated(render);
+
+  // Public API for other scripts to call
+  window.cartClient = {
+    add: async (variantId, quantity = 1) => {
+      try {
+        await addToCart(variantId, quantity);
+        open();
+      } catch (err) {
+        console.error(err);
+        alert("Couldn't add to cart. Please try again.");
+      }
+    },
+    open,
+    close,
+  };
+
+  // Hydrate cart on page load
+  getCart().then(render).catch(() => render(null));
+</script>

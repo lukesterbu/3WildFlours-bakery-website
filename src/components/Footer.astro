@@ -1,0 +1,83 @@
+---
+import Wildflower from "./Wildflower.astro";
+const year = new Date().getFullYear();
+---
+
+<footer class="bg-sage-900 text-cream-100 mt-24">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div>
+        <div class="flex items-center gap-2 mb-3">
+          <Wildflower class="text-cream-100" size={28} />
+          <span class="font-serif text-xl">3WildFlour's</span>
+        </div>
+        <p class="text-sm text-cream-200/80 leading-relaxed mb-2">
+          Small-batch breads, pastries, and custom cakes.
+        </p>
+        <p class="font-script text-xl text-cream-100/90">
+          earthy · honest · soulful
+        </p>
+      </div>
+
+      <div>
+        <h4 class="eyebrow !text-cream-100/70 mb-3">Explore</h4>
+        <ul class="space-y-2 text-sm">
+          <li><a href="/menu" class="hover:text-cream-50 transition-colors">Menu</a></li>
+          <li><a href="/about" class="hover:text-cream-50 transition-colors">About</a></li>
+          <li><a href="/custom-orders" class="hover:text-cream-50 transition-colors">Custom Orders</a></li>
+          <li><a href="/contact" class="hover:text-cream-50 transition-colors">Contact</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="eyebrow !text-cream-100/70 mb-3">Say hello</h4>
+        <ul class="space-y-2 text-sm text-cream-200/80">
+          <li>
+            <a
+              href="mailto:hello@3wildflours.com"
+              class="hover:text-cream-50 transition-colors"
+            >
+              hello@3wildflours.com
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://instagram.com/3wildflours"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 hover:text-cream-50 transition-colors"
+              aria-label="Instagram"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+              @3wildflours
+            </a>
+          </li>
+          <li>
+            <a href="/contact" class="hover:text-cream-50 transition-colors">
+              More ways to reach us →
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-10 pt-6 border-t border-cream-200/10 text-xs text-cream-200/60 text-center">
+      © {year} 3WildFlour's Bakery. Baked slow, lived wild.
+    </div>
+  </div>
+</footer>

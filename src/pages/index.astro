@@ -1,0 +1,142 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Wildflower from "../components/Wildflower.astro";
+import { getCollections } from "../lib/products";
+
+const allCollections = await getCollections();
+const featured =
+  allCollections.find((c) => c.title === "Featured")?.products.slice(0, 3) ?? [];
+
+const values = [
+  { label: "Natural ingredients", note: "Real butter, real flour, real time." },
+  { label: "Slow fermented", note: "24–48 hours, no shortcuts." },
+  { label: "Made by hand", note: "Every loaf, every laminate." },
+  { label: "Locally sourced", note: "Farms within 50 miles." },
+  { label: "Small batch", note: "Baked the morning you eat it." },
+];
+---
+
+<BaseLayout title="Home">
+  <section class="relative h-[78vh] min-h-[560px] flex items-center justify-center overflow-hidden">
+    <img
+      src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=1920&auto=format&fit=crop&q=80"
+      alt="Fresh baked bread"
+      class="absolute inset-0 w-full h-full object-cover"
+    />
+    <div class="absolute inset-0 bg-earth-900/55"></div>
+    <div class="relative text-center text-cream-50 px-6 max-w-3xl">
+      <p class="font-script text-2xl md:text-3xl text-cream-100/90 mb-2">
+        bread made with love,
+      </p>
+      <h1 class="text-5xl md:text-7xl mb-6 leading-[1.05]">
+        rooted in nature.
+      </h1>
+      <div class="flex items-center justify-center gap-3 mb-8">
+        <span class="h-px w-12 bg-cream-100/40"></span>
+        <span class="eyebrow !text-cream-100/80">earthy · honest · soulful</span>
+        <span class="h-px w-12 bg-cream-100/40"></span>
+      </div>
+      <div class="flex flex-wrap gap-4 justify-center">
+        <a
+          href="/menu"
+          class="bg-cream-50 hover:bg-cream-100 text-earth-900 px-8 py-3 rounded-full font-medium transition-colors"
+        >
+          Shop the menu
+        </a>
+        <a
+          href="/custom-orders"
+          class="border-2 border-cream-50 hover:bg-cream-50 hover:text-earth-900 text-cream-50 px-8 py-3 rounded-full font-medium transition-colors"
+        >
+          Custom orders
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-cream-100 py-14 border-y border-cream-200">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-10">
+        <p class="font-script text-2xl text-sage-700">how we bake</p>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-6 md:gap-4">
+        {values.map((v) => (
+          <div class="text-center px-2">
+            <Wildflower class="text-sage-500 mx-auto mb-2" size={36} />
+            <h3 class="eyebrow mb-2">{v.label}</h3>
+            <p class="text-xs text-earth-700/80 leading-relaxed">{v.note}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {featured.length > 0 && (
+  <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <div class="text-center mb-12">
+      <p class="font-script text-2xl text-sage-700 mb-1">in bloom this week</p>
+      <h2 class="text-4xl md:text-5xl mb-4">Our favorites, right now</h2>
+      <p class="text-earth-700/80 max-w-xl mx-auto">
+        Rotating seasonal bakes, alongside the staples that keep regulars coming back.
+      </p>
+    </div>
+    <div class="grid md:grid-cols-3 gap-8">
+      {featured.map((product) => (
+        <a href="/menu" class="group block">
+          <div class="aspect-[4/5] overflow-hidden rounded-lg mb-4 bg-cream-100">
+            {product.image ? (
+              <img
+                src={product.image.url}
+                alt={product.image.altText ?? product.title}
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+            ) : (
+              <div class="w-full h-full flex items-center justify-center text-earth-700/40 text-sm">
+                no photo yet
+              </div>
+            )}
+          </div>
+          <div class="flex justify-between items-baseline mb-1">
+            <h3 class="text-xl">{product.title}</h3>
+            <span class="text-sage-700 font-medium">{product.price}</span>
+          </div>
+          <p class="text-earth-700/80 text-sm line-clamp-2">{product.description}</p>
+        </a>
+      ))}
+    </div>
+    <div class="text-center mt-12">
+      <a
+        href="/menu"
+        class="inline-block bg-sage-700 hover:bg-sage-900 text-cream-50 px-8 py-3 rounded-full font-medium transition-colors"
+      >
+        See the full menu
+      </a>
+    </div>
+  </section>
+  )}
+
+  <section class="bg-sage-100/40 py-20 relative overflow-hidden">
+    <div class="absolute top-4 left-4 opacity-30">
+      <Wildflower class="text-sage-700" size={64} />
+    </div>
+    <div class="absolute bottom-4 right-4 opacity-30">
+      <Wildflower class="text-sage-700" size={64} />
+    </div>
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
+      <p class="font-script text-3xl text-sage-700 mb-3">flour + water = bread magic</p>
+      <h2 class="text-3xl md:text-4xl mb-6">
+        Three wild flours. One stubborn starter. A whole lot of patience.
+      </h2>
+      <p class="text-lg text-earth-700 leading-relaxed mb-8">
+        We mill heritage grains, ferment slowly, and bake every loaf by hand.
+        We won't promise we have your favorite every day — we'll promise that
+        whatever we made this morning was made with care.
+      </p>
+      <a
+        href="/about"
+        class="inline-block text-sage-700 hover:text-sage-900 font-medium underline-offset-4 hover:underline"
+      >
+        Read our story →
+      </a>
+    </div>
+  </section>
+</BaseLayout>
