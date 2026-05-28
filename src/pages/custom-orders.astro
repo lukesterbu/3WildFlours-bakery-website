@@ -1,38 +1,55 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import Wildflower from "../components/Wildflower.astro";
 ---
 
-<BaseLayout title="Custom Orders">
+<BaseLayout title="Custom Requests">
   <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
     <div class="text-center mb-12">
-      <p class="font-script text-2xl text-sage-700 mb-1">made just for you</p>
-      <h1 class="text-5xl md:text-6xl mb-4">Custom Orders</h1>
+      <p class="font-script text-2xl text-sage-700 mb-1">have something in mind?</p>
+      <h1 class="text-5xl md:text-6xl mb-4">Custom Requests</h1>
       <p class="text-earth-800/80 text-lg max-w-2xl mx-auto">
-        Wedding cakes, large pastry orders, corporate gifting, or anything
-        not on the standard menu — tell us what you have in mind.
+        Birthdays, larger batches, or something not on the menu — tell us
+        what you're hoping for and we'll see what we can do.
       </p>
     </div>
 
-    <div class="grid md:grid-cols-3 gap-6 mb-12">
-      <div class="bg-cream-100 p-6 rounded-lg text-center">
-        <div class="text-3xl mb-2">💒</div>
-        <h3 class="font-serif text-lg font-semibold mb-1">Weddings</h3>
-        <p class="text-sm text-earth-800/80">
-          Custom tiered cakes. Book 6+ weeks ahead.
-        </p>
-      </div>
+    <div class="grid md:grid-cols-3 gap-6 mb-10">
       <div class="bg-cream-100 p-6 rounded-lg text-center">
         <div class="text-3xl mb-2">🎂</div>
-        <h3 class="font-serif text-lg font-semibold mb-1">Celebrations</h3>
+        <h3 class="font-serif text-lg font-semibold mb-1">Special occasions</h3>
         <p class="text-sm text-earth-800/80">
           Birthdays, anniversaries, just-because cakes.
         </p>
       </div>
       <div class="bg-cream-100 p-6 rounded-lg text-center">
         <div class="text-3xl mb-2">📦</div>
-        <h3 class="font-serif text-lg font-semibold mb-1">Bulk & Corporate</h3>
+        <h3 class="font-serif text-lg font-semibold mb-1">Larger batches</h3>
         <p class="text-sm text-earth-800/80">
-          Trays of pastries, gift boxes, office orders.
+          A dozen of something for an event, brunch, or gift.
+        </p>
+      </div>
+      <div class="bg-cream-100 p-6 rounded-lg text-center">
+        <div class="text-3xl mb-2">🌾</div>
+        <h3 class="font-serif text-lg font-semibold mb-1">Something off-menu</h3>
+        <p class="text-sm text-earth-800/80">
+          A flavor, a favorite, a wild idea. Ask and we'll consider it.
+        </p>
+      </div>
+    </div>
+
+    <div class="bg-sage-100/40 rounded-lg p-6 mb-10 relative overflow-hidden">
+      <div class="absolute top-3 right-3 opacity-30">
+        <Wildflower class="text-sage-700" size={40} />
+      </div>
+      <div class="relative">
+        <p class="eyebrow mb-2">Please read before sending</p>
+        <p class="text-sm text-earth-800 leading-relaxed">
+          Submitting a request doesn't lock anything in. Kate bakes everything
+          herself in small batches, and some weeks fill up faster than others
+          — we'll reply with what's possible, suggest a different week, or let
+          you know if it's not something we can take on. Either way, we'll
+          always get back to you.
         </p>
       </div>
     </div>
@@ -76,34 +93,33 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           />
         </div>
         <div>
-          <label for="event-date" class="block text-sm font-medium mb-1">Event date</label>
+          <label for="needed-by" class="block text-sm font-medium mb-1">Needed by</label>
           <input
             type="date"
-            id="event-date"
-            name="event-date"
+            id="needed-by"
+            name="needed-by"
             class="w-full px-4 py-2 border border-cream-200 rounded focus:outline-none focus:ring-2 focus:ring-sage-700/30"
           />
         </div>
       </div>
 
       <div>
-        <label for="order-type" class="block text-sm font-medium mb-1">Order type</label>
+        <label for="request-type" class="block text-sm font-medium mb-1">What kind of request?</label>
         <select
-          id="order-type"
-          name="order-type"
+          id="request-type"
+          name="request-type"
           class="w-full px-4 py-2 border border-cream-200 rounded focus:outline-none focus:ring-2 focus:ring-sage-700/30"
         >
-          <option>Wedding cake</option>
-          <option>Celebration cake</option>
-          <option>Bulk pastries</option>
-          <option>Corporate / gifting</option>
-          <option>Something else</option>
+          <option>Special occasion bake</option>
+          <option>Larger batch of menu items</option>
+          <option>Something off-menu</option>
+          <option>Not sure yet</option>
         </select>
       </div>
 
       <div>
         <label for="details" class="block text-sm font-medium mb-1">
-          Tell us about your order
+          Tell us what you're hoping for
         </label>
         <textarea
           id="details"
@@ -119,8 +135,13 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         disabled
         class="w-full bg-cream-200 text-earth-800/60 cursor-not-allowed px-6 py-3 rounded-full font-medium"
       >
-        Send inquiry (form not yet active)
+        Send request (form not yet active)
       </button>
+
+      <p class="text-xs text-center text-earth-700/70">
+        Submitting a request does not guarantee it will be fulfilled.
+        We'll reply within a day or two.
+      </p>
     </form>
   </section>
 </BaseLayout>

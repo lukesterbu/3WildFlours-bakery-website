@@ -67,6 +67,7 @@ const hasProducts = sections.some((s) => s.products.length > 0);
                 <button
                   data-add-to-cart
                   data-variant-id={product.variantId}
+                  data-product-id={product.id}
                   data-title={product.title}
                   disabled={!product.available}
                   class:list={[
@@ -88,7 +89,52 @@ const hasProducts = sections.some((s) => s.products.length > 0);
 </BaseLayout>
 
 <script>
-  document.querySelectorAll<HTMLButtonElement>("[data-add-to-cart]").forEach((button) => {
+  import { getProductsAvailability } from "../lib/products";
+
+  const buttons = document.querySelectorAll<HTMLButtonElement>("[data-add-to-cart]");
+
+  // Refresh inventory after page load — the static build may be stale.
+  (async () => {
+    const productIds = Array.from(
+      new Set(
+        Array.from(buttons)
+          .map((b) => b.dataset.productId)
+          .filter((id): id is string => Boolean(id)),
+      ),
+    );
+    if (productIds.length === 0) return;
+
+    let availability: Record<string, boolean>;
+    try {
+      availability = await getProductsAvailability(productIds);
+    } catch (err) {
+      console.warn("Could not refresh inventory", err);
+      return;
+    }
+
+    const activeClasses = ["bg-sage-700", "hover:bg-sage-900", "text-cream-50"];
+    const soldOutClasses = ["bg-cream-200", "text-earth-800/60", "cursor-not-allowed"];
+
+    buttons.forEach((button) => {
+      const productId = button.dataset.productId;
+      if (!productId || !(productId in availability)) return;
+      const nowAvailable = availability[productId];
+      const wasAvailable = !button.disabled;
+      if (nowAvailable === wasAvailable) return;
+
+      button.disabled = !nowAvailable;
+      button.textContent = nowAvailable ? "Add to cart" : "Sold out";
+      if (nowAvailable) {
+        button.classList.remove(...soldOutClasses);
+        button.classList.add(...activeClasses);
+      } else {
+        button.classList.remove(...activeClasses);
+        button.classList.add(...soldOutClasses);
+      }
+    });
+  })();
+
+  buttons.forEach((button) => {
     button.addEventListener("click", async () => {
       const variantId = button.dataset.variantId;
       if (!variantId || button.disabled) return;

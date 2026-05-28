@@ -7,6 +7,43 @@ export interface ShopifyImage {
   height: number;
 }
 
+/**
+ * Fetches current `availableForSale` for a list of product IDs.
+ * Intended for client-side use to refresh inventory after the static
+ * page has loaded — the build-time menu can be stale.
+ */
+export async function getProductsAvailability(
+  ids: string[],
+): Promise<Record<string, boolean>> {
+  if (ids.length === 0) return {};
+
+  const { data, errors } = await shopify.request<{
+    nodes: Array<{ id: string; availableForSale: boolean } | null>;
+  }>(
+    /* GraphQL */ `
+      query ProductsAvailability($ids: [ID!]!) {
+        nodes(ids: $ids) {
+          ... on Product {
+            id
+            availableForSale
+          }
+        }
+      }
+    `,
+    { variables: { ids } },
+  );
+
+  if (errors || !data) {
+    throw new Error("Failed to fetch product availability");
+  }
+
+  const result: Record<string, boolean> = {};
+  for (const node of data.nodes) {
+    if (node) result[node.id] = node.availableForSale;
+  }
+  return result;
+}
+
 export interface ShopifyProduct {
   id: string;
   handle: string;
